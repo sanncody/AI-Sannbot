@@ -18,6 +18,8 @@ const io = new Server(httpServer, {
     }
 });
 
+const chatHistory = [];
+
 // Note: Remember this io is referring to server here and socket is referring to client or specific user who is connected
 
 /**
@@ -36,7 +38,22 @@ io.on('connection', (socket) => {
 
     // Custom event listening
     socket.on('ai-message', async (message) => {
-        const response = await generateResponse(message.prompt);
+        chatHistory.push({
+            role: 'user',
+            parts: [{
+                text: message
+            }]
+        });
+
+        const response = await generateResponse(chatHistory);
+
+        chatHistory.push({
+            role: 'model',
+            parts: [{
+                text: response
+            }]
+        });
+
         socket.emit('ai-response', { response });
     });
 });

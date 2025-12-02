@@ -5,10 +5,10 @@ const ai = new GoogleGenAI({
     apiKey: process.env.GEMINI_API_KEY
 });
 
-const generateResponse = async (prompt) => {
+const generateResponse = async (chatHistory) => {
     const response = await ai.models.generateContent({
         model: "gemini-2.5-flash",
-        contents: prompt,
+        contents: chatHistory,
         // config: {
         //     systemInstruction: `
         //         You are an expert in generating caption for images.
